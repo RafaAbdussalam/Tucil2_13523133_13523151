@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 
 public class Main{
@@ -9,6 +12,15 @@ public class Main{
 
         System.out.println("Masukkan Alamat Abosult Gambar yang ingin dikompresi:");
         String inputImagePath = scanner.nextLine();
+
+        //debug
+        // try {
+        //     ImageProcess imageProcess = new ImageProcess(inputImagePath);
+        //     imageProcess.showImageInfo();
+        // } catch (IOException e) {
+        //     System.out.println("Terjadi kesalahan: " + e.getMessage());
+        // }
+
         System.out.print("===================================\n");
         System.out.println("Masukkan Metode perhitungan Error:");
         System.out.println("1. Metode Variance");
@@ -29,6 +41,7 @@ public class Main{
         
         System.out.print("Masukkan alamat absolut untuk menyimpan gambar hasil kompresi: ");
         String outputImagePath = scanner.nextLine();
+
     }
 }
 
