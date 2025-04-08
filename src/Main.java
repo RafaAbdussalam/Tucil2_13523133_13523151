@@ -9,7 +9,13 @@ public class Main{
         Scanner scanner = new Scanner(System.in);
 
         boolean continueProgram = true;
-        System.out.println("Selamat datang di program kompresi gambar!");
+        System.out.println("\n======================================================");
+        System.out.println("=                  Selamat Datang                    =");
+        System.out.println("=       PROGRAM KOMPRESI GAMBAR DENGAN QUADTREE      =");
+        System.out.println("=                                                    =");
+        System.out.println("=            IF2211 Strategi Algoritma               =");
+        System.out.println("=                                                    =");
+        System.out.println("======================================================\n");
 
         String inputImagePath = ValidImagePath(scanner);
 
