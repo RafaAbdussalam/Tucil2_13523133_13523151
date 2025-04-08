@@ -23,7 +23,7 @@ public class Main{
         System.out.print("===================================\n");
         System.out.print("Pilih metode (1-5): ");
 
-        int choice = scanner.nextInt();
+        int errorMethod = scanner.nextInt();
         scanner.nextLine();
 
         double threshold = getValidDoubleInput(scanner, "Masukkan ambang batas (threshold) (nilai positif) :", 0, Double.MAX_VALUE);
@@ -33,21 +33,42 @@ public class Main{
         System.out.print("Masukkan alamat absolut untuk menyimpan gambar hasil kompresi: ");
         String outputImagePath = ValidOutputPath(scanner);
 
-        continueProgram = ContinueProgram(scanner);
- 
-
         System.out.println("\nMemulai proses kompresi...");
+        long startTime = System.currentTimeMillis();
+
+        Quadtree quadtree;
+
+        try {
+            quadtree = new Quadtree(inputImagePath, errorMethod, threshold, minBlockSize);
+        } catch (Exception e) {
+            System.out.println("[Error] Gagal memproses gambar: " + e.getMessage());
+            return;
+        }
+
+        System.out.println("Proses kompresi selesai.");
+        System.out.println("Menyimpan gambar hasil kompresi ke: " + outputImagePath);
+
+        try {
+            quadtree.saveCompressedImage(outputImagePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        long endTime = System.currentTimeMillis();
+        long executionTime = endTime - startTime;
 
         System.out.println("\n======================================================");
         System.out.println("=                 HASIL KOMPRESI                     =");
         System.out.println("======================================================");
-        System.out.printf("|[Output] Waktu eksekusi           :" + " ms");
-        System.out.printf("\n|[Output] Ukuran gambar sebelum    :" + " bytes");
-        System.out.printf("\n|[Output] Ukuran gambar setelah    :" + " bytes");
-        System.out.printf("\n|[Output] Persentase kompresi      :" );
-        System.out.printf("\n|[Output] Kedalaman pohon          :");
-        System.out.printf("\n|[Output] Banyak simpul pada pohon :");
-        System.out.println("\n======================================================");
+        System.out.println("|[Output] Waktu eksekusi           :" + executionTime + " ms");
+        System.out.println("|[Output] Ukuran gambar sebelum    :" + ImageProcess.getImageSize(inputImagePath) + " bytes");
+        System.out.println("|[Output] Ukuran gambar setelah    :" + quadtree.getCompressedSize() +" bytes");
+        System.out.println("|[Output] Persentase kompresi      :" + (1 - (double) quadtree.getCompressedSize()/(double) ImageProcess.getImageSize(inputImagePath)) * 100 + "%");
+        System.out.println("|[Output] Kedalaman pohon          :" + quadtree.getMaxDepth() + " level");
+        System.out.println("|[Output] Banyak simpul pada pohon :" + quadtree.getTotalNodes() + " simpul");
+        System.out.println("======================================================");
+
+        continueProgram = ContinueProgram(scanner);
         
     }
 
@@ -56,7 +77,7 @@ public class Main{
             System.out.println("Masukkan nama file gambar atau path absolut yang ingin dikompresi (ketik 'cancel' untuk batal):");
             String path = scanner.nextLine().trim();
             
-            if (path.equalsIgnoreCase("cancel")) {
+            if (path.equalsIgnoreCase("keluar")) {
                 return null;
             }
             
@@ -79,8 +100,8 @@ public class Main{
             }
             
             String extension = path.substring(path.lastIndexOf('.') + 1).toLowerCase();
-            if (!extension.matches("jpg|jpeg|png|bmp")) {
-                System.out.println("[Error] File bukan gambar yang didukung. Format yang didukung: jpg, jpeg, png, bmp.");
+            if (!extension.matches("jpg|jpeg|png")) {
+                System.out.println("[Error] Program hanya dapat menerima File dengan Format : jpg, jpeg, png.");
                 continue;
             }
             
@@ -98,8 +119,8 @@ public class Main{
             }
 
             String extension = path.substring(path.lastIndexOf('.') + 1).toLowerCase();
-            if (!extension.matches("jpg|jpeg|png|bmp")) {
-                System.out.println("[Error] Format file output tidak didukung. Format yang didukung: jpg, jpeg, png, bmp.");
+            if (!extension.matches("jpg|jpeg|png")) {
+                System.out.println("[Error] Format file output tidak didukung. Format yang didukung: jpg, jpeg, png.");
                 continue;
             }
 
