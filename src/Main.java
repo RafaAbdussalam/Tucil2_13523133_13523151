@@ -96,16 +96,12 @@ public class Main{
 
     private static String ValidImagePath(Scanner scanner) {
         while (true) {
-            System.out.println("Masukkan nama file gambar atau path absolut yang ingin dikompresi (ketik 'keluar' untuk batal):");
+            System.out.println("Masukkan nama file gambar atau path absolut yang ingin dikompresi :");
             String path = scanner.nextLine().trim();
-            
-            if (path.equalsIgnoreCase("keluar")) {
-                return null;
-            }
             
             File file = new File(path);
             if (!file.exists()) {
-                File testImageFile = new File("../test/" + path);
+                File testImageFile = new File("../test/input/" + path);
                 if (testImageFile.exists()) {
                     file = testImageFile;
                     path = testImageFile.getAbsolutePath();
@@ -133,13 +129,9 @@ public class Main{
     
     private static String ValidOutputPath(Scanner scanner) {
         while (true) {
-            System.out.println("Masukkan nama file atau path absolut untuk menyimpan gambar hasil kompresi (ketik 'keluar' untuk batal):");
+            System.out.println("Masukkan nama file atau path absolut untuk menyimpan gambar hasil kompresi :");
             String path = scanner.nextLine().trim();
             
-            if (path.equalsIgnoreCase("keluar")) {
-                return null;
-            }
-
             String extension = path.substring(path.lastIndexOf('.') + 1).toLowerCase();
             if (!extension.matches("jpg|jpeg|png")) {
                 System.out.println("[Error] Format file output tidak didukung. Format yang didukung: jpg, jpeg, png.");
@@ -147,11 +139,11 @@ public class Main{
             }
 
             if (!path.contains("/") && !path.contains("\\")) {
-                File outputDir = new File("../test");
+                File outputDir = new File("../test/output/");
                 if (!outputDir.exists()) {
                     outputDir.mkdirs();
                 }
-                path = "../test/" + path;
+                path = "../test/output/" + path;
                 System.out.println("File akan disimpan di: " + new File(path).getAbsolutePath());
             }
 
