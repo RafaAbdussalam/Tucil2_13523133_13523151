@@ -1,7 +1,5 @@
-import java.util.Scanner;
 import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import java.util.Scanner;
 
 
 public class Main{
@@ -19,7 +17,7 @@ public class Main{
 
         String inputImagePath = ValidImagePath(scanner);
 
-        System.out.print("===================================\n");
+        System.out.print("\n===================================\n");
         System.out.println("Masukkan Metode perhitungan Error:");
         System.out.println("1. Metode Variance");
         System.out.println("2. Metode Mean Absolute Deviation (MAD)");
@@ -32,11 +30,10 @@ public class Main{
         int errorMethod = scanner.nextInt();
         scanner.nextLine();
 
-        double threshold = getValidDoubleInput(scanner, "Masukkan ambang batas (threshold) (nilai positif) :", 0, Double.MAX_VALUE);
+        double threshold = getValidDoubleInput(scanner, "Masukkan ambang batas (threshold) (nilai positif): ", 0, Double.MAX_VALUE);
         
         int minBlockSize = getValidIntInput(scanner, "Masukkan ukuran blok minimum (nilai positif): ", 1, Integer.MAX_VALUE);
         
-        System.out.print("Masukkan alamat absolut untuk menyimpan gambar hasil kompresi: ");
         String outputImagePath = ValidOutputPath(scanner);
 
         System.out.println("\nMemulai proses kompresi...");
@@ -117,7 +114,7 @@ public class Main{
     
     private static String ValidOutputPath(Scanner scanner) {
         while (true) {
-            System.out.println("Masukkan nama file output atau path absolut (ketik 'cancel' untuk batal):");
+            System.out.println("Masukkan nama file atau path absolut untuk menyimpan gambar hasil kompresi (ketik 'cancel' untuk batal):");
             String path = scanner.nextLine().trim();
             
             if (path.equalsIgnoreCase("cancel")) {
