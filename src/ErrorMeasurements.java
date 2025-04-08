@@ -156,7 +156,6 @@ public class ErrorMeasurements {
                 entropy -= (probability * (Math.log(probability) / Math.log(2))) / 3;
             }
         }
-
         return entropy;
     }
 
