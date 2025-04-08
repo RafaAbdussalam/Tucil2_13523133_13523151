@@ -15,8 +15,6 @@ public class ErrorMeasurements {
                 return MaxPixelDifference(image, x, y, width, height);
             case 4:
                 return Entropy(image, x, y, width, height);
-            default:
-                throw new IllegalArgumentException("Invalid error calculation method");
         }
     }
 

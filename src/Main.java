@@ -7,79 +7,96 @@ public class Main{
         Scanner scanner = new Scanner(System.in);
 
         boolean continueProgram = true;
-        System.out.println("\n======================================================");
-        System.out.println("=                                                    =");
-        System.out.println("=                  SELAMAT DATANG                    =");
-        System.out.println("=                                                    =");
-        System.out.println("=       PROGRAM KOMPRESI GAMBAR DENGAN QUADTREE      =");
-        System.out.println("=                                                    =");
-        System.out.println("=             IF2211 Strategi Algoritma              =");
-        System.out.println("=                                                    =");
-        System.out.println("======================================================\n");
+        while(continueProgram) {
+            try {
+           
+            System.out.println("\n======================================================");
+            System.out.println("=                                                    =");
+            System.out.println("=                  SELAMAT DATANG                    =");
+            System.out.println("=                                                    =");
+            System.out.println("=       PROGRAM KOMPRESI GAMBAR DENGAN QUADTREE      =");
+            System.out.println("=                                                    =");
+            System.out.println("=             IF2211 Strategi Algoritma              =");
+            System.out.println("=                                                    =");
+            System.out.println("======================================================\n");
 
-        String inputImagePath = ValidImagePath(scanner);
+            String inputImagePath = ValidImagePath(scanner);
 
-        System.out.print("\n===================================\n");
-        System.out.println("Masukkan Metode perhitungan Error:");
-        System.out.println("1. Metode Variance");
-        System.out.println("2. Metode Mean Absolute Deviation (MAD)");
-        System.out.println("3. Metode Max Pixel Difference");
-        System.out.println("4. Metode Entropy");
-        System.out.println("5. Keluar");
-        System.out.print("===================================\n");
-        System.out.print("Pilih metode (1-5): ");
+            System.out.print("\n===================================\n");
+            System.out.println("Masukkan Metode perhitungan Error:");
+            System.out.println("1. Metode Variance");
+            System.out.println("2. Metode Mean Absolute Deviation (MAD)");
+            System.out.println("3. Metode Max Pixel Difference");
+            System.out.println("4. Metode Entropy");
+            System.out.println("5. Keluar");
+            System.out.print("===================================\n");
+            System.out.print("Pilih metode (1-5): ");
 
-        int errorMethod = scanner.nextInt();
-        scanner.nextLine();
+            int errorMethod = scanner.nextInt();
+            scanner.nextLine();
 
-        double threshold = getValidDoubleInput(scanner, "Masukkan ambang batas (threshold) (nilai positif): ", 0, Double.MAX_VALUE);
+            if(errorMethod == 5){
+                System.out.println("Terima kasih telah menggunakan program ini!");
+                break;
+            }else if(errorMethod < 1 || errorMethod > 5){
+                System.out.println("[Error] Pilihan tidak valid. Silakan pilih antara 1-5.");
+                continue;
+            }
+
+            double threshold = getValidDoubleInput(scanner, "Masukkan ambang batas (threshold) (nilai positif): ", 0, Double.MAX_VALUE);
+            
+            int minBlockSize = getValidIntInput(scanner, "Masukkan ukuran blok minimum (nilai positif): ", 1, Integer.MAX_VALUE);
+            
+            String outputImagePath = ValidOutputPath(scanner);
+
+            System.out.println("\nMemulai proses kompresi...");
+            long startTime = System.currentTimeMillis();
+
+            Quadtree quadtree;
+
+            try {
+                quadtree = new Quadtree(inputImagePath, errorMethod, threshold, minBlockSize);
+            } catch (Exception e) {
+                System.out.println("[Error] Gagal memproses gambar: " + e.getMessage());
+                return;
+            }
+
+            System.out.println("Proses kompresi selesai.");
+            System.out.println("Menyimpan gambar hasil kompresi ke: " + outputImagePath);
+
+            try {
+                quadtree.saveCompressedImage(outputImagePath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            long endTime = System.currentTimeMillis();
+            long executionTime = endTime - startTime;
+
+            double persentasekompresi = (1 - (double) quadtree.getCompressedSize()/(double) ImageProcess.getImageSize(inputImagePath)) * 100;
+
+            System.out.println("\n======================================================");
+            System.out.println("=                 HASIL KOMPRESI                     =");
+            System.out.println("======================================================");
+            System.out.println("|[Output] Waktu eksekusi           :" + executionTime + " ms");
+            System.out.println("|[Output] Ukuran gambar sebelum    :" + ImageProcess.getImageSize(inputImagePath) + " bytes");
+            System.out.println("|[Output] Ukuran gambar setelah    :" + quadtree.getCompressedSize() +" bytes");
+            System.out.printf("|[Output] Persentase kompresi      : %.2f%%\n", persentasekompresi);
+            System.out.println("|[Output] Kedalaman pohon          :" + quadtree.getMaxDepth() + " level");
+            System.out.println("|[Output] Banyak simpul pada pohon :" + quadtree.getTotalNodes() + " simpul");
+            System.out.println("======================================================");
+
+            continueProgram = ContinueProgram(scanner);
         
-        int minBlockSize = getValidIntInput(scanner, "Masukkan ukuran blok minimum (nilai positif): ", 1, Integer.MAX_VALUE);
-        
-        String outputImagePath = ValidOutputPath(scanner);
-
-        System.out.println("\nMemulai proses kompresi...");
-        long startTime = System.currentTimeMillis();
-
-        Quadtree quadtree;
-
-        try {
-            quadtree = new Quadtree(inputImagePath, errorMethod, threshold, minBlockSize);
-        } catch (Exception e) {
-            System.out.println("[Error] Gagal memproses gambar: " + e.getMessage());
-            return;
+            } catch (Exception e) {
+                System.out.println("[Error] Terjadi kesalahan: " + e.getMessage());
+            }
         }
-
-        System.out.println("Proses kompresi selesai.");
-        System.out.println("Menyimpan gambar hasil kompresi ke: " + outputImagePath);
-
-        try {
-            quadtree.saveCompressedImage(outputImagePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        long endTime = System.currentTimeMillis();
-        long executionTime = endTime - startTime;
-
-        System.out.println("\n======================================================");
-        System.out.println("=                 HASIL KOMPRESI                     =");
-        System.out.println("======================================================");
-        System.out.println("|[Output] Waktu eksekusi           :" + executionTime + " ms");
-        System.out.println("|[Output] Ukuran gambar sebelum    :" + ImageProcess.getImageSize(inputImagePath) + " bytes");
-        System.out.println("|[Output] Ukuran gambar setelah    :" + quadtree.getCompressedSize() +" bytes");
-        System.out.println("|[Output] Persentase kompresi      :" + (1 - (double) quadtree.getCompressedSize()/(double) ImageProcess.getImageSize(inputImagePath)) * 100 + "%");
-        System.out.println("|[Output] Kedalaman pohon          :" + quadtree.getMaxDepth() + " level");
-        System.out.println("|[Output] Banyak simpul pada pohon :" + quadtree.getTotalNodes() + " simpul");
-        System.out.println("======================================================");
-
-        continueProgram = ContinueProgram(scanner);
-        
     }
 
     private static String ValidImagePath(Scanner scanner) {
         while (true) {
-            System.out.println("Masukkan nama file gambar atau path absolut yang ingin dikompresi (ketik 'cancel' untuk batal):");
+            System.out.println("Masukkan nama file gambar atau path absolut yang ingin dikompresi (ketik 'keluar' untuk batal):");
             String path = scanner.nextLine().trim();
             
             if (path.equalsIgnoreCase("keluar")) {
@@ -116,10 +133,10 @@ public class Main{
     
     private static String ValidOutputPath(Scanner scanner) {
         while (true) {
-            System.out.println("Masukkan nama file atau path absolut untuk menyimpan gambar hasil kompresi (ketik 'cancel' untuk batal):");
+            System.out.println("Masukkan nama file atau path absolut untuk menyimpan gambar hasil kompresi (ketik 'keluar' untuk batal):");
             String path = scanner.nextLine().trim();
             
-            if (path.equalsIgnoreCase("cancel")) {
+            if (path.equalsIgnoreCase("keluar")) {
                 return null;
             }
 
@@ -161,12 +178,12 @@ public class Main{
             try {
                 int value = Integer.parseInt(input);
                 if (value < min || value > max) {
-                    System.out.println("[Error] Nilai harus antara " + min + " dan " + max + ". Coba lagi atau ketik 'cancel' untuk batal.");
+                    System.out.println("[Error] Nilai harus antara " + min + " dan " + max + ".  Silahkan Coba lagi");
                     continue;
                 }
                 return value;
             } catch (NumberFormatException e) {
-                System.out.println("[Error] Input bukan angka integer yang valid. Coba lagi atau ketik 'cancel' untuk batal.");
+                System.out.println("[Error] Input bukan angka integer yang valid. Silahkan coba lagi ");
             }
         }
     }
@@ -179,12 +196,12 @@ public class Main{
             try {
                 double value = Double.parseDouble(input);
                 if (value < min || value > max) {
-                    System.out.println("[Error] Nilai harus antara " + min + " dan " + max + ". Coba lagi atau ketik 'cancel' untuk batal.");
+                    System.out.println("[Error] Nilai harus antara " + min + " dan " + max + ". Silahkan coba lagi");
                     continue;
                 }
                 return value;
             } catch (NumberFormatException e) {
-                System.out.println("[Error] Input bukan angka yang valid. Coba lagi atau ketik 'cancel' untuk batal.");
+                System.out.println("[Error] Input bukan angka yang valid. Silahkan coba lagi");
             }
         }
     }
@@ -196,6 +213,7 @@ public class Main{
             if (input.equals("y") || input.equals("yes") || input.equals("Y") || input.equals("Yes")) {
                 return true;
             } else if (input.equals("n") || input.equals("no") || input.equals("N") || input.equals("No")) {
+                System.out.println("Terima kasih telah menggunakan program ini!");
                 return false;
             } else {
                 System.out.println("Input tidak valid. Masukkan yang valid berupa 'y' untuk ya atau 'n' untuk tidak.");
