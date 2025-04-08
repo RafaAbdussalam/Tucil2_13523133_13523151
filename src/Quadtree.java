@@ -19,10 +19,24 @@ public class Quadtree {
 
     public buildQuadtree(int X, int Y, int width, int height) {
 
-        if (width <= minBlockSize || height <= minBlockSize) {
-            return new QuadTreeNode(X, Y, width, height);
+        int[] avgColor = ErrorCalculator.AverageColor(imageProcessor, x, y, width, height);
+        
+        double error = ErrorCalculator.calculateError(errorMethod, imageProcessor, x, y, width, height);
+        
+        if (error <= threshold || width <= minBlockSize || height <= minBlockSize || 
+            width / 2 < minBlockSize || height / 2 < minBlockSize) {
+            return new QuadTreeNode(x, y, width, height, avgColor[0], avgColor[1], avgColor[2]);
         }
-
+        
+        int halfWidth = width / 2;
+        int halfHeight = height / 2;
+        
+        QuadTreeNode topLeft = buildQuadTree(x, y, halfWidth, halfHeight);
+        QuadTreeNode topRight = buildQuadTree(x + halfWidth, y, width - halfWidth, halfHeight);
+        QuadTreeNode bottomLeft = buildQuadTree(x, y + halfHeight, halfWidth, height - halfHeight);
+        QuadTreeNode bottomRight = buildQuadTree(x + halfWidth, y + halfHeight, width - halfWidth, height - halfHeight);
+        
+        return new QuadTreeNode(x, y, width, height, topLeft, topRight, bottomLeft, bottomRight);
     }
     
 }
