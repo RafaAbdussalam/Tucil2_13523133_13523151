@@ -1,10 +1,11 @@
+
 import java.awt.image.BufferedImage; 
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class ImageProcess {
-    private BufferedImage image;
+    private final BufferedImage image;
     private int width;
     private int height;
 
@@ -52,10 +53,15 @@ public class ImageProcess {
         return file.length();
     }
 
-
     //debug
     // public void showImageInfo() {
     //     System.out.println("Lebar: " + width + " piksel");
     //     System.out.println("Tinggi: " + height + " piksel");
     // }
+
+    public static void saveImage(String outputPath, BufferedImage outputImage) throws IOException {
+        File outputFile = new File(outputPath);
+        String extension = outputPath.substring(outputPath.lastIndexOf('.') + 1);
+        ImageIO.write(outputImage, extension, outputFile);
+    }
 }
