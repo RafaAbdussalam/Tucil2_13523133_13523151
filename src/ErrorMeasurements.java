@@ -1,4 +1,6 @@
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ErrorMeasurements {
@@ -150,7 +152,9 @@ public class ErrorMeasurements {
         }
         
         double entropy = 0;
-        for (Map<Integer, Integer> freq : new Map[]{redFreq, greenFreq, blueFreq}) {
+        
+        List<Map<Integer, Integer>> freqs = Arrays.asList(redFreq, greenFreq, blueFreq);
+        for (Map<Integer, Integer> freq : freqs) {
             for (int count : freq.values()) {
                 double probability = (double) count / pixels;
                 entropy -= (probability * (Math.log(probability) / Math.log(2))) / 3;
