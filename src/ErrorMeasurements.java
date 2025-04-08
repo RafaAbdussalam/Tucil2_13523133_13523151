@@ -3,7 +3,7 @@ import java.util.Map;
 
 public class ErrorMeasurements {
     
-    public static double calculateError(int method, ImageProcessor image, int x, int y, int width, int height) {
+    public static double calculateError(int method, ImageProcess image, int x, int y, int width, int height) {
         switch (method) {
             case 1:
                 return Variance(image, x, y, width, height);
@@ -18,16 +18,16 @@ public class ErrorMeasurements {
         }
     }
 
-    public static int[] AverageColor(ImageProcessor image, int x, int y, int width, int height) {
+    public static int[] AverageColor(ImageProcess image, int x, int y, int width, int height) {
         long sumRed = 0; long sumGreen = 0; long sumBlue = 0;
         int pixels = 0;
         
         for (int i = x; i < x + width; i++) {
             for (int j = y; j < y + height; j++) {
                 int rgb = image.getPixel(i, j);
-                sumRed += ImageProcessor.getRed(rgb);
-                sumGreen += ImageProcessor.getGreen(rgb);
-                sumBlue += ImageProcessor.getBlue(rgb);
+                sumRed += ImageProcess.getRed(rgb);
+                sumGreen += ImageProcess.getGreen(rgb);
+                sumBlue += ImageProcess.getBlue(rgb);
                 pixels++;
             }
         }
@@ -37,23 +37,23 @@ public class ErrorMeasurements {
         };
     }
 
-    private static double Varience(ImageProcessor image, int x, int y, int width, int height){
+    private static double Variance(ImageProcess image, int x, int y, int width, int height){
         int[] avgColor = AverageColor(image, x, y, width, height);
         int avgRed = avgColor[0];
         int avgGreen = avgColor[1];
         int avgBlue = avgColor[2];
         
-        double sumSquaredDiffRed = 0;
-        double sumSquaredDiffGreen = 0;
-        double sumSquaredDiffBlue = 0;
+        double sumSqDiffRed = 0;
+        double sumSqDiffGreen = 0;
+        double sumSqDiffBlue = 0;
         int pixels = 0;
         
         for (int i = x; i < x + width && i < image.getWidth(); i++) {
             for (int j = y; j < y + height && j < image.getHeight(); j++) {
                 int rgb = image.getPixel(i, j);
-                int red = ImageProcessor.getRed(rgb);
-                int green = ImageProcessor.getGreen(rgb);
-                int blue = ImageProcessor.getBlue(rgb);
+                int red = ImageProcess.getRed(rgb);
+                int green = ImageProcess.getGreen(rgb);
+                int blue = ImageProcess.getBlue(rgb);
                 
                 sumSqDiffRed += Math.pow(red - avgRed, 2);
                 sumSqDiffGreen += Math.pow(green - avgGreen, 2);
@@ -62,13 +62,14 @@ public class ErrorMeasurements {
             }
         }
 
-        redVariance = sumSqDiffRed / pixels;
-        greenVariance = sumSqDiffGreen / pixels;
-        blueVariance = sumSqDiffBlue / pixels;
+        double redVariance = sumSqDiffRed / pixels;
+        double greenVariance = sumSqDiffGreen / pixels;
+        double blueVariance = sumSqDiffBlue / pixels;
+
         return (redVariance + greenVariance + blueVariance) / 3;
     }
 
-    private static double MeanAbsoluteDeviation(ImageProcessor image, int x, int y, int width, int height){
+    private static double MeanAbsoluteDeviation(ImageProcess image, int x, int y, int width, int height){
         int[] avgColor = AverageColor(image, x, y, width, height);
         int avgRed = avgColor[0];
         int avgGreen = avgColor[1];
@@ -82,9 +83,9 @@ public class ErrorMeasurements {
         for (int i = x; i < x + width && i < image.getWidth(); i++) {
             for (int j = y; j < y + height && j < image.getHeight(); j++) {
                 int rgb = image.getPixel(i, j);
-                int red = ImageProcessor.getRed(rgb);
-                int green = ImageProcessor.getGreen(rgb);
-                int blue = ImageProcessor.getBlue(rgb);
+                int red = ImageProcess.getRed(rgb);
+                int green = ImageProcess.getGreen(rgb);
+                int blue = ImageProcess.getBlue(rgb);
                 
                 sumAbsDiffRed += Math.abs(red - avgRed);
                 sumAbsDiffGreen += Math.abs(green - avgGreen);
@@ -100,7 +101,7 @@ public class ErrorMeasurements {
         return (madRed + madGreen + madBlue) / 3;
     }
     
-    private static double MaxPixelDifference(ImageProcessor image, int x, int y, int width, int height){
+    private static double MaxPixelDifference(ImageProcess image, int x, int y, int width, int height){
         int minRed = 255, maxRed = 0;
         int minGreen = 255, maxGreen = 0;
         int minBlue = 255, maxBlue = 0;
@@ -108,9 +109,9 @@ public class ErrorMeasurements {
         for (int i = x; i < x + width && i < image.getWidth(); i++) {
             for (int j = y; j < y + height && j < image.getHeight(); j++) {
                 int rgb = image.getPixel(i, j);
-                int red = ImageProcessor.getRed(rgb);
-                int green = ImageProcessor.getGreen(rgb);
-                int blue = ImageProcessor.getBlue(rgb);
+                int red = ImageProcess.getRed(rgb);
+                int green = ImageProcess.getGreen(rgb);
+                int blue = ImageProcess.getBlue(rgb);
                 
                 minRed = Math.min(minRed, red);
                 maxRed = Math.max(maxRed, red);
@@ -128,8 +129,35 @@ public class ErrorMeasurements {
         return (difRed + difGreen + difBlue) / 3;
     }
 
-    private static double Entropy(){
+    private static double Entropy(ImageProcess image, int x, int y, int width, int height){
+        Map<Integer, Integer> redFreq = new HashMap<>();
+        Map<Integer, Integer> greenFreq = new HashMap<>();
+        Map<Integer, Integer> blueFreq = new HashMap<>();
+        int pixels = 0;
 
+        for (int i = x; i < x + width; i++) {
+            for (int j = y; j < y + height; j++) {
+                int rgb = image.getPixel(i, j);
+                int red = ImageProcess.getRed(rgb);
+                int green = ImageProcess.getGreen(rgb);
+                int blue = ImageProcess.getBlue(rgb);
+                
+                redFreq.put(red, redFreq.getOrDefault(red, 0) + 1);
+                greenFreq.put(green, greenFreq.getOrDefault(green, 0) + 1);
+                blueFreq.put(blue, blueFreq.getOrDefault(blue, 0) + 1);
+                pixels++;
+            }
+        }
+        
+        double entropy = 0;
+        for (Map<Integer, Integer> freq : new Map[]{redFreq, greenFreq, blueFreq}) {
+            for (int count : freq.values()) {
+                double probability = (double) count / pixels;
+                entropy -= (probability * (Math.log(probability) / Math.log(2))) / 3;
+            }
+        }
+
+        return entropy;
     }
 
 
