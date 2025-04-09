@@ -81,7 +81,7 @@ public class Main{
             System.out.println("|[Output] Waktu eksekusi           :" + executionTime + " ms");
             System.out.println("|[Output] Ukuran gambar sebelum    :" + ImageProcess.getImageSize(inputImagePath) + " bytes");
             System.out.println("|[Output] Ukuran gambar setelah    :" + quadtree.getCompressedSize() +" bytes");
-            System.out.printf("|[Output] Persentase kompresi      : %.2f%%\n", persentasekompresi);
+            System.out.printf("|[Output] Persentase kompresi      :%.2f%%\n", persentasekompresi);
             System.out.println("|[Output] Kedalaman pohon          :" + quadtree.getMaxDepth() + " level");
             System.out.println("|[Output] Banyak simpul pada pohon :" + quadtree.getTotalNodes() + " simpul");
             System.out.println("======================================================");
