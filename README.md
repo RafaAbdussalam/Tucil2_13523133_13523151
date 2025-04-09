@@ -17,29 +17,27 @@ Proyek ini merupakan bagian dari **Tugas Kecil 2 Strategi Algoritma** yang mengh
 
 ## 🛠 **Cara Menjalankan Program**  
 
-### 1️⃣ **Persiapan Awal**  
-Pastikan Anda memiliki: 
+### 1️⃣ Persiapan Awal  
+Pastikan Anda sudah menginstall **.Java**
 
-- ✅ **.Java**
-
-### 2️⃣ **Clone Repository**  
+### 2️⃣ Clone Repository
 ```sh
 git clone https://github.com/RafaAbdussalam/Tucil2_13523133_13523151.git
-cd Tucil2_13523133_13523151
 ```
 
-### 3️⃣ **Masuk Direktori Program Utama **  
+### 3️⃣ Masuk Direktori Program Utama  
 ```sh
 cd Tucil2_13523133_13523151
 cd src
 ```
 
-### 4️⃣ **Compile Program dan Jalankan Program **  
+### 4️⃣ Compile Program dan Jalankan Program 
 ```sh
 javac Main.java ImageProcess.java ErrorMeasurements.java Quadtree.java QuadtreeNode.java
 java Main
 ```
 
+### Catatan Penting: Untuk gambar yang ingin dikompresi masukkan ke dalam folder input di dalam folder test  
 
 ## 📌 **Spesifikasi Implementasi**  
 ✅ **Bahasa Pemrograman:** JAVA  
