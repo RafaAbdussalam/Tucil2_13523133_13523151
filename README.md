@@ -3,13 +3,10 @@
 🎯 **Tugas Kecil 2 - Strategi Algoritma**  
 📌 **Institut Teknologi Bandung, Informatika, K-3**  
 
----
-
 ## 🏆 **Tentang Program Ini**  
 
 Proyek ini merupakan bagian dari **Tugas Kecil 2 Strategi Algoritma** yang mengharuskan mahasiswa mengembangkan program kompresi gambar menggunakan Algoritma Divide and Conquer.  
 
----
 
 ## 🚀 **Fitur Program**  
 ✔️ **Menggunakan Algoritma Divide and conquer** untuk melakukan kompresi gambar berbasis quadtree.  
@@ -17,8 +14,6 @@ Proyek ini merupakan bagian dari **Tugas Kecil 2 Strategi Algoritma** yang mengh
 ✔️ **Kompresi Gambar** berbasis quadtree yang mengimplementasikan seluruh parameter. 
 ✔️ **Menampilkan Hasil Kompresi Gambar** memberikan output gambar hasil Kompresi. 
 
-
----
 
 ## 🛠 **Cara Menjalankan Program**  
 
@@ -45,7 +40,6 @@ javac Main.java ImageProcess.java ErrorMeasurements.java Quadtree.java QuadtreeN
 java Main
 ```
 
----
 
 ## 📌 **Spesifikasi Implementasi**  
 ✅ **Bahasa Pemrograman:** JAVA  
@@ -70,5 +64,3 @@ java Main
     </tr>
   </table>
 </p>
-
----
